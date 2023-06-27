@@ -1,8 +1,9 @@
 import { MagnifyingGlass } from 'react-loader-spinner';
+import { LoaderStyled, LoadingText } from './loader.styled';
 
 export const Loader = () => {
   return (
-    <div>
+    <LoaderStyled>
       <MagnifyingGlass
         visible={true}
         height="80"
@@ -13,7 +14,7 @@ export const Loader = () => {
         glassColor="#c0efff"
         color="#e15b64"
       />
-      <h2>Loading...</h2>;
-    </div>
+      <LoadingText>Loading...</LoadingText>;
+    </LoaderStyled>
   );
 };
