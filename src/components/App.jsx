@@ -3,6 +3,8 @@ import { getImages } from './services/pixabayApi';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
+import { Loader } from './Loader/Loader';
+import { AppWrapper } from './app.styled';
 
 export class App extends Component {
   state = {
@@ -10,15 +12,18 @@ export class App extends Component {
     q: '',
     images: [],
     showBtn: false,
+    loading: false,
   };
 
   componentDidUpdate(_, prevState) {
     const { q, page } = this.state;
+
     if (q !== prevState.q || page !== prevState.page) {
       getImages(q, page).then(({ hits, totalHits }) => {
         this.setState(prevState => ({
           images: [...prevState.images, ...hits],
           showBtn: page < Math.ceil(totalHits / 12),
+          loading: false,
         }));
       });
     }
@@ -30,6 +35,7 @@ export class App extends Component {
       page: 1,
       images: [],
       showBtn: false,
+      loading: true,
     });
   };
 
@@ -40,14 +46,15 @@ export class App extends Component {
   };
 
   render() {
-    const { images, showBtn } = this.state;
+    const { images, showBtn, loading } = this.state;
 
     return (
-      <>
+      <AppWrapper>
         <Searchbar onSubmit={this.onSubmit} />
-        <ImageGallery images={images} />
+        {loading ? <Loader /> : <ImageGallery images={images} />}
+
         {showBtn && <Button onBtnMoreClick={this.onBtnMoreClick} />}
-      </>
+      </AppWrapper>
     );
   }
 }
